@@ -1,19 +1,20 @@
 <!--
   Sync Impact Report
   ==================
-  Version change: 1.0.0 → 1.1.0 (MINOR - new section added)
+  Version change: 1.1.0 → 1.2.0 (MINOR - new sections added)
 
   Modified principles: None
 
   Added sections:
-  - Technology Constraints (Node.js + Express.js + TypeScript stack)
+  - Data Persistence Guidelines (under Technology Constraints)
+  - Authentication & Security Guidelines (new principle IV)
 
   Removed sections: None
 
   Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ (Technical Context section will use these defaults)
+  - .specify/templates/plan-template.md ✅ (no changes needed - Technical Context already has Storage field)
   - .specify/templates/spec-template.md ✅ (no changes needed)
-  - .specify/templates/tasks-template.md ✅ (no changes needed)
+  - .specify/templates/tasks-template.md ✅ (already includes authentication/authorization in foundational phase)
 
   Follow-up TODOs: None
 -->
@@ -58,6 +59,20 @@ Start with the simplest solution that meets requirements. Complexity MUST be jus
 
 **Rationale**: Simplicity reduces maintenance burden, cognitive load, and defect rates while accelerating delivery.
 
+### IV. Authentication & Security
+
+User authentication and data protection MUST follow industry-standard security practices.
+
+- **Password Security**: Passwords MUST be hashed using bcrypt, Argon2, or equivalent algorithms; plaintext storage is NEVER permitted
+- **Session Management**: Sessions MUST have configurable expiration (default: 24 hours standard, 30 days with "remember me")
+- **Token Security**: Authentication tokens (JWT or session tokens) MUST be transmitted only over HTTPS in production
+- **Input Validation**: All user inputs MUST be validated and sanitized before processing
+- **Error Opacity**: Authentication error messages MUST NOT reveal whether an email/username exists in the system
+- **Password Requirements**: Passwords MUST enforce minimum strength requirements (8+ characters, mixed case, numbers)
+- **Account Deletion**: Users MUST be able to permanently delete their accounts and all associated data
+
+**Rationale**: Security vulnerabilities erode user trust and expose the project to legal and reputational risk. These non-negotiable practices establish a baseline defense.
+
 ## Technology Constraints
 
 ### Runtime & Language
@@ -83,6 +98,27 @@ Start with the simplest solution that meets requirements. Complexity MUST be jus
 - **Type Safety**: `any` type SHOULD be avoided; explicit types MUST be used for public APIs
 - **Dependencies**: New dependencies MUST be justified; prefer built-in Node.js APIs when sufficient
 - **Node.js APIs**: Prefer `node:` prefixed imports (e.g., `import fs from 'node:fs'`)
+
+### Data Persistence Guidelines
+
+User data MUST be stored persistently in a server-side database. Browser-based storage (localStorage, sessionStorage, IndexedDB) MUST NOT be used as the primary data store.
+
+| Aspect | Requirement | Notes |
+|--------|-------------|-------|
+| **Storage Type** | Server-side database | PostgreSQL, MySQL, SQLite, or MongoDB |
+| **Data Durability** | Indefinite retention | Data persists until explicit user deletion |
+| **Cross-Device Access** | Required | Users MUST access their data from any authenticated device |
+| **Conflict Resolution** | Last-write-wins | Server timestamp determines authoritative version |
+| **Backup Strategy** | Recommended | Regular database backups for disaster recovery |
+
+**Prohibited Storage Patterns**:
+
+- Browser localStorage/sessionStorage as primary data store
+- Client-only IndexedDB without server synchronization
+- Cookies for storing user data (authentication tokens only)
+- In-memory storage without persistence layer
+
+**Rationale**: Persistent server-side storage ensures data survives device changes, browser clears, and accidental data loss while enabling cross-device access.
 
 ### Project Structure
 
@@ -156,4 +192,4 @@ This constitution supersedes all other development practices for this project. W
 - Violations MUST be documented in the Complexity Tracking section of plans
 - Justified violations are acceptable; undocumented violations are not
 
-**Version**: 1.1.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-17
+**Version**: 1.2.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
