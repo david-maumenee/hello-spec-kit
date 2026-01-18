@@ -1,2 +1,3 @@
 # hello-spec-kit
-Spec-Driven Development helloword
+
+Spec-Driven Development of a ToDo List App
