@@ -27,3 +27,20 @@ npm-debug.log*
 # Cache
 .cache/
 *.tmp
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Backend specific
+backend/db/*.db
+
+# Frontend specific
+frontend/dist/
+
+# playwright local dir
+.playwright-mcp/
