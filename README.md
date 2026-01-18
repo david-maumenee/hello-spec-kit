@@ -8,7 +8,7 @@ Spec-Driven Development of a ToDo List App
 
 **Prompt used to generate the spec:**
 
-> "Create a new feature that allows multiple users to use the app. User must be identified first before accessing their own task list. The data must be accessible from any device."
+> build an app to manage todo list of tasks. Tasks can have due date."
 
 **Screenshots:**
 
